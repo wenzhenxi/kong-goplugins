@@ -43,6 +43,18 @@ nginx_worker_processes = 1   # Determines the number of worker processes
 
 ```
 
+## PKG
+
+
+GetRequestBodyByKey
+```
+
+rawBody, _ := kong.Request.GetRawBody()
+contentType, _ := kong.Request.GetHeader("Content-Type")
+params, _ := body.GetDataByKey(contentType, rawBody, "params")
+
+```
+
 
 ## ADD Plugin
 
