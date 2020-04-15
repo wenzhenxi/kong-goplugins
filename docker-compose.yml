@@ -18,6 +18,7 @@ services:
       - "5432:5432/tcp"
   kong:
     image: kong-goplugins
+    restart: always
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=db
@@ -33,11 +34,13 @@ services:
       - "8000:8000"
       - "8443:8443"
       - "8001:8001"
-    depends_on: db
+    depends_on:
+      - db
   konga:
     image: pantsel/konga
     environment:
       NODE_ENV: production
     ports:
       - "1337:1337/tcp"
-    depends_on: kong
+    links:
+      - kong

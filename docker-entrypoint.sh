@@ -29,11 +29,6 @@ if [[ "$1" == "kong" ]]; then
   PREFIX=${KONG_PREFIX:=/usr/local/kong}
   file_env KONG_PG_PASSWORD
 
-
-  if [[ "$3" == "dbup" ]]; then
-
-  fi
-
   if [[ "$2" == "docker-start" ]]; then
 
     # Initialize the database before running
