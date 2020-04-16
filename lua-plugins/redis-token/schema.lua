@@ -13,6 +13,7 @@ return {
                 { redis_password = { type = "string", len_min = 0 }, },
                 { redis_timeout = { type = "number", default = 2000, }, },
                 { redis_database = { type = "integer", default = 0 }, },
+                { redis_prefix = { type = "string", default = "" }, },
                 { php_serialization = { type = "boolean", default = false }, },
                 { token_name = { type = "string", default = "X-Token" }, },
                 { id_name = { type = "string", default = "X-Id" }, },

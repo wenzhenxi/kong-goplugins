@@ -27,54 +27,53 @@ function RedisTokenHandler:access(conf)
     local ok, err = red:connect(conf.redis_host, conf.redis_port,
             sock_opts)
     if not ok then
-        kong.log.err("failed to connect to Redis: ", err)
-        return nil, err
+        return kong.response.exit(500, { message = "red error" })
     end
 
     local times, err = red:get_reused_times()
     if err then
-        kong.log.err("failed to get connect reused times: ", err)
-        return nil, err
+        return kong.response.exit(500, { message = "red error" })
     end
 
     if times == 0 then
         if is_present(conf.redis_password) then
             local ok, err = red:auth(conf.redis_password)
             if not ok then
-                kong.log.err("failed to auth Redis: ", err)
-                return nil, err
+                return kong.response.exit(500, { message = "red error" })
             end
         end
 
         if conf.redis_database ~= 0 then
             -- Only call select first time, since we know the connection is shared
             -- between instances that use the same redis database
-
             local ok, err = red:select(conf.redis_database)
             if not ok then
-                kong.log.err("failed to change Redis database: ", err)
-                return nil, err
+                return kong.response.exit(500, { message = "red error" })
             end
         end
     end
 
-    local token = kong.request.get_header("SUNMI-Token")
+    local token = kong.request.get_header(conf.token_name)
 
     if token == "" then
-        return kong.response.exit(500, { message = "token" })
+        return kong.response.exit(500, { message = "get_header error" })
     end
 
-    local current_metric = red:get("tob_admin_Cipher_Turn_" .. token)
+    local current_metric = red:get(conf.redis_prefix .. token)
 
     if current_metric == ngx.null then
-        return kong.response.exit(500, { message = "token" })
+        return kong.response.exit(500, { message = "red:get error" })
+    end
+    local id = current_metric
+
+    if conf.php_serialization then
+        id = unserialize(current_metric)
+        if id == "" then
+            return kong.response.exit(500, { message = "unserialize error" })
+        end
     end
 
-    local id = unserialize(current_metric)
-    if id == "" then
-        return kong.response.exit(500, { message = current_metric })
-    end
-    return kong.response.exit(200, id)
+    kong.request.set_header(conf.id_name, id)
 end
 
 RedisTokenHandler.PRIORITY = 800
