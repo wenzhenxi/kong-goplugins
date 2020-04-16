@@ -35,8 +35,8 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 COPY --from=go-plugins /project/go-so /usr/local/share/lua/5.1/kong/plugins/go-so
 COPY --from=go-pluginserver /project/go-pluginserver/go-pluginserver /usr/local/bin/
 
-COPY ./lua-plugins/* /usr/local/share/lua/5.1/kong/plugins/
-COPY ./pkg/lualib/* /usr/local/openresty/lualib/
+COPY ./lua-plugins/ /usr/local/share/lua/5.1/kong/plugins/
+COPY ./pkg/lualib/ /usr/local/openresty/lualib/
 
 USER kong
 
