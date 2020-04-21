@@ -13,13 +13,13 @@ build:
 
 # So
 go-hello.so:
-	go build -o go-so/go-hello.so -buildmode=plugin ./app/go-hello.go
+	go build -o go-so/go-hello.so -buildmode=plugin ./app/go_hello.go
 
 go-log.so:
-	go build -o go-so/go-log.so -buildmode=plugin ./app/go-log.go
+	go build -o go-so/go-log.so -buildmode=plugin ./app/go_log.go
 
 go-exit.so:
-	go build -o go-so/go-exit.so -buildmode=plugin ./app/go-exit.go
+	go build -o go-so/go-exit.so -buildmode=plugin ./app/go_exit.go
 
 go-token.so:
-	go build -o go-so/go-token.so -buildmode=plugin ./app/go-token.go
+	go build -o go-so/go-token.so -buildmode=plugin ./app/go_token.go
